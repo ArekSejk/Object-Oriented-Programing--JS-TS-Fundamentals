@@ -185,9 +185,29 @@ country:"Nederland"
 >greeting:() => console.log('elo!')  //metoda nalezaca do instancji VanG.
 name2:"Vincet"
 >[[Prototype]]:Object // wlasciwosci nalezace do prototypu,ale nie dostepne bezposrednio jako wlasc. instancji*/
+console.log('............................')
 
 
+// OOB freecodecamp.org
+let names = {
+    fname: "Dillion",
+    lname: "Megida"
+}
+console.log(names.fname); //Dillion
+console.log(names.hasOwnProperty("mname")); // false
 
-
-// POLIMORFIZM - zdolność do wywoływania tej samej metody na roznych obiektach i reagowania na swój wlasny sposób.
+// 
+function DogObject(name, age) {
+    let dog = Object.create(constructorObject);
+    dog.name = name;
+    dog.age = age;
+    return dog;
+}
+let constructorObject = {
+    speak: function () {
+        return "I am a dog"
+    }
+}
+let bingo = DogObject("Bingo", 54);
+console.log(bingo);
 

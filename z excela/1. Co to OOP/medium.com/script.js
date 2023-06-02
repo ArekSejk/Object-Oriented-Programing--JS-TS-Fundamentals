@@ -151,6 +151,8 @@ class Animals {
 }
 
 class Cats extends Animals {
+
+    icon: String;
     constructor(nazwa, gatunek, kolorWasow) {
         super(nazwa, gatunek); //pozyczane z animals
         this.kolorWasow = kolorWasow;
@@ -163,4 +165,5 @@ const kot1 = new Cats('mruczek', 'egipski', 4, 'muuuu', "blue");
 console.log(kot1)
 console.log(kot1.hasOwnProperty('bieg'))
 /*jako swoje wlasciwosci ma nazwa,gatunek(z konstruktora clasy Animal) i kolorWasow (z konstruktowa clasy Cats). Mam dostep do prototypu classy Cats z ktorego mam dostep do: bieg oraz w tym prototypie Cats mam dostep do prototypu Animals z metoda dzwiek*/
+
 

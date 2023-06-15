@@ -26,8 +26,8 @@ class Item {
     discountValue = 0;
 
     constructor(name, price) {
-        this.name = (typeof name === 'string') ? name : console.error('Zly typ name!');
-        this.price = (typeof price === 'number') ? price : console.error('Zly format price');
+        this.name = (typeof name === 'string') ? name : error('Zly typ name!');
+        this.price = (typeof price === 'number') ? price : error('Zly format price');
         this.uuid = Math.floor(Math.random() * 1000000000000)
         this.discountedPrice = price;
     }

@@ -80,7 +80,7 @@ class Cart {
         const indexToRemove = this.selectedProdsList.findIndex(e => e.prodInCart.uuid === product.uuid);
 
         if (indexToRemove !== -1) this.selectedProdsList.splice(indexToRemove, 1);
-      // bez " else this.selectedProdsList[indexToRemove].quantity--; " bo od zmiany ilosci jest metoda chhangeQuantity a tu ma nie wazne ile to ma usunac ten produkt"
+      // bez " else this.selectedProdsList[indexToRemove].quantity--; " bo od zmiany ilosci jest metoda chhangeQuantity a tu ma niewazne ile to ma usunac ten produkt"
     }
 
     changeQuantity(product, pcs) {

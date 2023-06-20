@@ -58,32 +58,56 @@ class Group {
 
 
 
+class Validator {
+
+    static isValidContactName(name) {
+        return ((/^[a-z]{2,}$/i.test(name)))
+    }
+
+    static isValidEmail(email) {
+        return (/^[a-z\d]+[-\w\.]*@[a-z\d]+([-\w]+\.)[a-z]{2,6}$/i.test(email));
+    }
+
+    static isValidGroupName(name) {
+        return (/^.{3,}$/i.test(name));
+    }
+}
+
+
+
 
 
 class AddressBook {
     contacts = [];
     groups = [];
 
+
     createContact(name, lastName, email) {
-        if (!(/^[a-z]{2,}$/i.test(name))) return 'zla wartosc name';
-        if (!(/^[a-z]{2,}$/i.test(lastName))) return 'zla wartosc lastName';
-        if (!/^[a-z\d]+[-\w\.]*@[a-z\d]+([-\w]+\.)[a-z]{2,6}$/i.test(email)) return 'zla wartosc email';
+
+        if (!Validator.isValidContactName(name)) return 'zla wiadomosc name';
+        if (!Validator.isValidContactName(lastName)) return 'zla wiadomosc lastName';
+        if (!Validator.isValidEmail(email)) return 'zla wartosc email';
 
         const contactInstance = new Contact(name, lastName, email);
         this.contacts.push(contactInstance);
     }
 
+
+    findGroupIndex(groupName) {
+        return this.groups.findIndex(e => e.name.toLowerCase() === groupName.toLowerCase());
+    }
+
+
+    findContactIndex(contactName, contactLastName) {
+        return this.contacts.findIndex(e => e.name.toLowerCase() === contactName.toLowerCase() && e.lastName.toLowerCase() === contactLastName.toLowerCase());
+    }
+
+
     deleteContact(contactName, contactLastName) {
-        if (!(/^[a-z]{2,}$/i.test(contactName))) return 'zla wartosc name';
-        if (!(/^[a-z]{2,}$/i.test(contactLastName))) return 'zla wartosc lastName';
-        const contactIndexToRemove = this.contacts.findIndex(e => e.name === contactName && e.lastName === contactLastName);
+        //gdyby bylo wiecej contactow o tym samym name i lastname warto szukac tez po email/uuid..
+        this.contacts.splice(this.findContactIndex(contactName, contactLastName), 1);
 
-        if (contactIndexToRemove === -1) return 'Nie ma takiego kontaktu';
-
-        this.contacts.splice(contactIndexToRemove, 1);
-
-
-        const groupIndex = this.groups.findIndex(e => e.contactList.find(e => e.name === contactName && e.lastName === contactLastName));
+        const groupIndex = this.groups.findIndex(e => e.contactList.find(e => e.name.toLowerCase() === contactName.toLowerCase() && e.lastName.toLowerCase() === contactLastName.toLowerCase()));
 
         if (groupIndex === -1) return;
 
@@ -92,50 +116,36 @@ class AddressBook {
         return this.deleteContactFromGroup(contactName, contactLastName, groupName);
     }
 
+
     createGroup(name) {
-        if (!(/^.{3,}$/i.test(name))) return 'zla wartosc name';
+        if (!Validator.isValidGroupName(name)) return 'zla wartosc name';
+
+        if (this.findGroupIndex(name) !== -1) return 'grupa o tej nazwie juz istnieje';
 
         const groupInstance = new Group(name);
         this.groups.push(groupInstance)
     }
 
+
     deleteGroup(name) {
-        if (!(/^.{3,}$/i.test(name))) return 'zla wartosc name';
 
-        const groupIndexToRemove = this.groups.findIndex(e => e.name === name);
-
-        if (groupIndexToRemove === -1) return 'nie ma takiej grupy';
-
-        this.groups.splice(groupIndexToRemove, 1);
+        this.groups.splice(this.findGroupIndex(name), 1);
     }
+
 
     addContactToGroup(contactName, contactLastName, groupName) {
-        if (!(/^[a-z]{2,}$/i.test(contactName))) return 'zla wartosc name';
-        if (!(/^[a-z]{2,}$/i.test(contactLastName))) return 'zla wartosc lastName';
-        if (!(/^.{3,}$/i.test(groupName))) return 'zla wartosc name';
 
-        const contactIndex = this.contacts.findIndex(e => e.name === contactName && e.lastName === contactLastName);
-        if (contactIndex === -1) return 'Nie ma takiego kontaktu';
-
-        const groupIndex = this.groups.findIndex(e => e.name === groupName);
-        if (groupIndex === -1) return 'Nie ma takiej grupy';
-
-        this.groups[groupIndex].contactList.push(this.contacts[contactIndex]);
+        this.groups[this.findGroupIndex(groupName)].contactList.push(this.contacts[this.findContactIndex(contactName, contactLastName)]);
     }
+
 
     deleteContactFromGroup(contactName, contactLastName, groupName) {
-        if (!(/^[a-z]{2,}$/i.test(contactName))) return 'zla wartosc name';
-        if (!(/^[a-z]{2,}$/i.test(contactLastName))) return 'zla wartosc lastName';
-        if (!(/^.{3,}$/i.test(groupName))) return 'zla wartosc name';
 
-        const groupIndex = this.groups.findIndex(e => e.name === groupName);
-        if (groupIndex === -1) return 'Nie ma takiej grupy';
+        const contactIndexInGroup = this.groups[this.findGroupIndex(groupName)].contactList.findIndex(e => e.name.toLowerCase() === contactName.toLowerCase() && e.lastName.toLowerCase() === contactLastName.toLowerCase());
 
-        const contactIndex = this.groups[groupIndex].contactList.findIndex(e => e.name === contactName && e.lastName === contactLastName);
-        if (contactIndex === -1) return 'Nie ma takiego kontaktu w tej grupie';
-
-        this.groups[groupIndex].contactList.splice(contactIndex, 1);
+        if (contactIndexInGroup !== -1) return this.groups[this.findGroupIndex(groupName)].contactList.splice(contactIndexInGroup, 1);
     }
+
 
     findContact(phrase) {
 
@@ -146,85 +156,62 @@ class AddressBook {
         });
     }
 
+
     changeContactName(currName, currLastName, newName, newLastName) {
-        if (!(/^[a-z]{2,}$/i.test(currName))) return 'zla wartosc name';
-        if (!(/^[a-z]{2,}$/i.test(currLastName))) return 'zla wartosc lastName';
+        if (!Validator.isValidContactName(newName)) return 'zla wartosc name';
+        if (!Validator.isValidContactName(newLastName)) return 'zla wartosc lastName';
 
-        if (!(/^[a-z]{2,}$/i.test(newName))) return 'zla wartosc name';
-        if (!(/^[a-z]{2,}$/i.test(newLastName))) return 'zla wartosc lastName';
+        const contactIndex = this.findContactIndex(currName, currLastName);
 
-        const indexContactToChange = this.contacts.findIndex(e => e.name === currName && e.lastName === currLastName);
-
-        this.contacts[indexContactToChange].name = newName;
-        this.contacts[indexContactToChange].lastName = newLastName;
-    }
-    //przy zmianie wlasciwosci contactu, jego wlasciw. w grupie tez z auto sie zmienia
-
-    changeContactEmail(contactName, newEmail) {
-        if (!/^[a-z\d]+[-\w\.]*@[a-z\d]+([-\w]+\.)[a-z]{2,6}$/i.test(newEmail)) return 'zla wartosc email';
-
-        this.contacts[this.contacts.findIndex(e => e.name === contactName)].email = newEmail; //tu data modyfikacji nie ulegla zmianie a ponizej owszem!!!
+        this.contacts[contactIndex].setName(newName);
+        this.contacts[contactIndex].setLastName(newLastName);
+        //musialem uzyc zmiennej z indx poniewaz po wykonaniu linijki setName juz porownanie sie nie zgadzalo, bo imie bylo zmienione, wiec dzialalo tylko dla jednego z nich
     }
 
-    //lub z uzyciem metody setEmail() z classy Contact.....
 
-    //  this.contacts[this.contacts.findIndex(e => e.name === contactName)].setEmail(newEmail);
+    changeContactEmail(contactName, contactLastName, newEmail) {
+        if (!Validator.isValidEmail(newEmail)) return 'zla wartosc email';
+
+        this.contacts[this.findContactIndex(contactName, contactLastName)].setEmail(newEmail);//setEmail z cl.Contact
+    }
 
 
     changeGroupName(currName, newName) {
-        if (!(/^.{3,}$/i.test(currName))) return 'zla wartosc name';
-        if (!(/^.{3,}$/i.test(newName))) return 'zla wartosc name';
+        if (!Validator.isValidGroupName(newName)) return 'zla wartosc name';
 
-        this.groups[this.groups.findIndex(e => e.name === currName)].name = newName;
+        this.groups[this.findGroupIndex(currName)].setName(newName)//setName z cl.Contact
     }
-
-    //czy z .setName() z classy Groups....
-
-    // changeGroupName2(currName, newName) {
-    //     this.groups[this.groups.findIndex(e => e.name === currName)].setName(newName)
-    // }
-
 }
 
 const book1 = new AddressBook();
 
 book1.createContact('Angelika', 'Berkowska', 'angee@gmail.com');
 book1.createContact('Marek', "Nowak", 'm.nowak@op.pl');
-book1.createContact('Franciszek', 'Kowalski', 'francesco44@wp.pl');
-book1.createContact('Janina', 'Hampel', 'ruda_janka@tlen.pl');
-book1.createContact('Bogdan', 'Baraniak', 'baran11@yahoo.com');
-book1.createContact('Maja', 'Bogucka', 'majeczka111@gmail.com')
+//book1.createContact('Franciszek', 'Kowalski', 'francesco44@wp.pl');
+//book1.createContact('Janina', 'Hampel', 'ruda_janka@tlen.pl');
 
 book1.createGroup('pierwsza');
 book1.createGroup('druga');
-book1.createGroup('trzecia');
+
 
 book1.addContactToGroup('Angelika', 'Berkowska', 'pierwsza');
 book1.addContactToGroup('Marek', "Nowak", 'pierwsza');
 book1.addContactToGroup('Franciszek', 'Kowalski', 'druga');
-book1.addContactToGroup('Janina', 'Hampel', 'trzecia');
-book1.addContactToGroup('Bogdan', 'Baraniak', 'trzecia');
-book1.addContactToGroup('Maja', 'Bogucka', 'druga')
+book1.addContactToGroup('Janina', 'Hampel', 'druga');
 
-book1.deleteContact('Marek', 'Nowak')
-
-book1.changeContactName('Janina', 'Hampel', 'Madona', 'Morales Gonzzales')
-book1.changeGroupName('pierwsza', 'zmieniona Nazwa Na Fajną')
-
-
+console.log(...book1.groups)
 
 
 
 //Pytania?
-// 1. Bez constructora w addressbook?
+// 1. Bez constructora w addressbook? tak moze byc classa bez constructora
 
-// 2. W jaki sposob przeprowadzac modyfikacje? korzystac z funkcji podrzednych?Np. zmiana nazwy grupy book1.groups[0].setName('nowaNazwa') gdzie setName to metoda z classy Group.
+// 2. Jesli modyfikujemy obiekty stworzone w oparciu o inne klasy, (np w classie AdressBook tworzymy funkcją createContact kontakt, na podstawie klasy Contact), to najlepiej modyfikowac je metodami z tamtej klasy Contact. O ile je posiadaja. jesli nie to pisac nowe. Wtedy tez np. odpowiednio zmienia sie data modyfikacji, a robiac to manualnie piszac nowe metody nie korzystajac z metod z Contact data sie nie zmienia.
 
-//Jesli pisac wszystko od nowa w kazdej klasie, to jaki jest do konca sens pisac te wszystkie metody w dwoch miejscach?!
+//3. classa ponoc ma sie zajmowac 1 odpowiedzuialnoscia. ja mam giganta! ale to nie szkodzi. Ona nadal ma jedna odpowiadzalnosc, czyli zarzadzanie kontaktami solo i w grupach. jedynie walidacje mozna dac do jakies osobnej klassy z statycznymi metodami.
 
-//3. classa ponoc ma sie zajmowac 1 odpowiedzuialnoscia. ja mam giganta!
+//4. Walidacje robimy tylko w tych metodach, ktore tworza nam obiekty. Tam jest istotne zeby podac w odpowiednim formacie nazwy,dane itd. W funkcjach, find/get/change nie potrzeba. Jak zmieni to zmieni, jak zle wpisze i nie znajdzie to najwyzej nie znajdziei tyle
 
-//4. Czy regexpa moge zapisac jako zmienna wlasna classy czy tak nie powinno sie robic?
+//5. W wielu metodach w addresBook uzywam innej metody z tej samej klasy jak findContactIndex czy FindgroupIndex dzieki temu oszczedzam pisania kodu
 
-
-//5. Czy jest sens robic w walidacje w metodach, ktore modyfikuja ale juz zwalidowane podczas tworzenia obiekty?
+//6. Nalezy pamietac, ze jesli uzywam wewnatrz klassy metody pochodzace tez z tej klasy to przed nimi nalezy rowniez pisac this!!!

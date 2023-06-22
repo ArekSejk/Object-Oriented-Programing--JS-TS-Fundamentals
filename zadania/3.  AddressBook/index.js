@@ -27,6 +27,11 @@ class Contact {
 
 
 
+
+
+
+
+
 class Group {
     contactList = [];
 
@@ -183,6 +188,11 @@ class AddressBook {
     }
 }
 
+
+
+
+
+
 const book1 = new AddressBook();
 
 book1.createContact('Angelika', 'Berkowska', 'angee@gmail.com');
@@ -203,7 +213,7 @@ console.log(...book1.groups)
 
 
 
-//Pytania?
+//Teoria 
 // 1. Bez constructora w addressbook? tak moze byc classa bez constructora
 
 // 2. Jesli modyfikujemy obiekty stworzone w oparciu o inne klasy, (np w classie AdressBook tworzymy funkcją createContact kontakt, na podstawie klasy Contact), to najlepiej modyfikowac je metodami z tamtej klasy Contact. O ile je posiadaja. jesli nie to pisac nowe. Wtedy tez np. odpowiednio zmienia sie data modyfikacji, a robiac to manualnie piszac nowe metody nie korzystajac z metod z Contact data sie nie zmienia.

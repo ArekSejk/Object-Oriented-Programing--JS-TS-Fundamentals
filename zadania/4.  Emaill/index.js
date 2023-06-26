@@ -40,7 +40,7 @@ class Email {
 
 
 class EmailBuilder {
-//warto tu tworzyc constructor z  min.1 property(wtedy zwracamy obiekt, a nie klasie)
+    //warto tu tworzyc constructor z  min.1 property(wtedy zwracamy obiekt, a nie klasie)
     setFrom(from) {
         this.from = from;
         return this;
@@ -73,26 +73,16 @@ class EmailBuilder {
     build() {
         return new Email(this.from, this.to, this.title, this.cc, this.bcc, this.html);
     }
+    //albo od razu zwrot w jsonie.
+    // return JSON.stringify(new Email(this.from, this.to, this.title, this.cc, this.bcc, this.html));
 }
 
 const email1 = new EmailBuilder().setFrom('jan@op.pl').setTo('ala@wp.pl').setCC(['marek@op.pl', 'ja@gg.pl']).build()
 
+const emailWjsonie = JSON.stringify(email1)
+
 console.log(email1)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+console.log(emailWjsonie)
 
 
 

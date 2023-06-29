@@ -133,7 +133,6 @@ class AddressBook {
 
 
     deleteGroup(name) {
-
         this.groups.splice(this.findGroupIndex(name), 1);
     }
 

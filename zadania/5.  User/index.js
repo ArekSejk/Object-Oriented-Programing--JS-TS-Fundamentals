@@ -78,6 +78,7 @@ class User {
         this.email = email;
         this.accessLevel = accessLevel;
     }
+    
     formatBirthDate(birthDate) {
 
         const regex = /^(1[0-2]|0?[1-9])\/(3[01]|[12][0-9]|0?[1-9])\/[0-9]{2}?([0-9]{2})$/;
@@ -211,3 +212,6 @@ console.log(...myApp.listOfUsers)
 
 // 2. Data- milion formatow. Smietnik! Czy zrobilem ok?
 
+const test = is.date(new Date())
+
+//co to za biblioteka is.js podana w linkach?

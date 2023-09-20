@@ -210,7 +210,11 @@ console.log(...myApp.listOfUsers)
 // Pytania:
 // 1. Co nam daje w setEmail ze zrobimy try i catch, jesli konsola drukuje dokladnie to samo w obu przypadkach? Nie zatrzyma dalszej funkcji czy co? Wykonuje dalej wszystko co jest po try/catch. W tym przypadku jest to tylko return, ale jakbym wpisal wiecej to wszystko by sie dzialo:)
 
-// 2. Data- milion formatow. Smietnik! Czy zrobilem ok?
+/* 2. W klasie app, w metodach setPassword, setEmail , setAcc.. zamiast robic w tryu np.
+ this.listOfUsers[this.findUserOrAdminIndex(userEmail)].Password === newPassword  robię
+this.listOfUsers[this.findUserOrAdminIndex(userEmail)].setPassword(newPassword)  czyli uzywam metod z classy User, po to by uzyc jej wszystkie mechanizmy (np. z walidacja itd). Na pierwszy rzut oka wydaje sie uzycie wlasnej metody ale to tylko zbieznosc nazw metod w obu classach.
+
+*/
 
 const test = is.date(new Date())
 

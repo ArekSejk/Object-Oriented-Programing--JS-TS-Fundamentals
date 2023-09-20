@@ -37,7 +37,7 @@ for (let key in cosTam) {
 }
 //to samo robi Object.keys(coTam)
 
-//i gdy chce klucze iwartosci
+//i gdy chce klucze i wartosci
 for (let key in cosTam) {
     console.log(key, cosTam[key])
 }
@@ -60,9 +60,9 @@ if ('siusiak' in cosTam) {
 
 
 
-// ABSTRAKCJA  - ukrywanie niepotrzebnych dla uzytkownika szczegolow i wystawienie jesynie niezbednych
+// ABSTRAKCJA  - ukrywanie niepotrzebnych dla uzytkownika szczegolow i wystawienie jedynie niezbednych
 
-//Ponizszy zapis jest dostepny publicznie dla wszystkich i ego wszystkie wlasciwosci i metody
+//Ponizszy zapis jest dostepny publicznie dla wszystkich i jego wszystkie wlasciwosci i metody
 function Kwadrat(bok, color) {
     this.bok = bok;
     this.color = color;
@@ -87,7 +87,7 @@ function Kwadrat2(bok) {
     this.bok = bok;
 
     this.rob = function () {
-        //      this.zadanie(5, 1) //taki zapis byl ok gdy zadanie bylo publicznie dostepne z this.zadanie, skoro jest let to musi byc ponizszy zapis bez this. Tutaj beda one dostepne mimo, ze sa na let a nie this poniewaz wh CLOSURES funkcja w funkcji ma dostep do swoich zmiennych i zmiennych rodzica
+        //      this.zadanie(5, 1) //taki zapis byl ok gdy zadanie bylo publicznie dostepne z this.zadanie, skoro jest let to musi byc ponizszy zapis bez this. Tutaj beda one dostepne mimo, ze sa na let a nie this poniewaz w CLOSURES funkcja w funkcji ma dostep do swoich zmiennych i zmiennych rodzica
 
         zadanie()
         console.log('cos tam zrobilem')
@@ -130,6 +130,7 @@ function Kwadrat5(bok) {
     this.getColor = function () { //getter!
         return color;
     }
+
     Object.defineProperty(this, 'color', {
         get: function () {
             return color;
@@ -163,7 +164,7 @@ function Stopwatch() {
         if (!running) {
             throw new Error('Stopwatch jeszcze sie nie zaczela')
         }
-            running = false;
+        running = false;
         endTime = new Date();
 
         const seconds = (endTime.getTime() - startTime.getTime()) / 1000;
